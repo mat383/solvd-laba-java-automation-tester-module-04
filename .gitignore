@@ -3,5 +3,6 @@
 *.iml
 *.log
 /target/
+/reports/
 uniqueWordsCount.txt
 connection-config.properties
