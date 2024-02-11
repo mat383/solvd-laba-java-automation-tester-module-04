@@ -81,7 +81,6 @@ public class PostTest {
 
         // create post
         CreatePost createPost = new CreatePost();
-        createPost.setHeader("session-id", "fsdjflksjdf");
         createPost.addProperty("post", post);
 
         Response createPostResponse = createPost.callAPIExpectSuccess();
@@ -89,22 +88,17 @@ public class PostTest {
 
         // Read received post
         Post recievedPost = createPostFromJson(createPostResponse.jsonPath());
-        Post postModification = new Post();
-        postModification.setTitle("A Brand New Title");
 
+        // Modify received post for patch
+        recievedPost.setTitle("A Brand New Title");
+        recievedPost.setBody("Different body.");
 
-        System.out.println(recievedPost.toString());
-
+        // modify post
         ModifyPost modifyPost = new ModifyPost(recievedPost.getId());
-        modifyPost.setHeader("session-id", "fsdjflksjdf");
-        modifyPost.addProperty("original_post", recievedPost);
-        modifyPost.addProperty("post_modification", postModification);
+        modifyPost.addProperty("modified_post", recievedPost);
 
         Response modifyPostResponse = modifyPost.callAPIExpectSuccess();
-
         modifyPost.validateResponse();
-        System.out.println(modifyPostResponse.asString());
-
     }
 
 
