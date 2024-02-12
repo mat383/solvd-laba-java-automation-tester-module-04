@@ -1,4 +1,4 @@
-package com.solvd.laba.testing.api.api;
+package com.solvd.laba.testing.api.method;
 
 import com.zebrunner.carina.api.AbstractApiMethodV2;
 import com.zebrunner.carina.api.annotation.Endpoint;

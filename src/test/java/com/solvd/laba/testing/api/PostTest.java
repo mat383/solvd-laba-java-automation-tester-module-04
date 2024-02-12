@@ -1,11 +1,11 @@
 package com.solvd.laba.testing.api;
 
-import com.solvd.laba.testing.api.api.CreatePost;
-import com.solvd.laba.testing.api.api.GetAllPosts;
-import com.solvd.laba.testing.api.api.GetPostById;
-import com.solvd.laba.testing.api.api.ModifyPost;
 import com.solvd.laba.testing.api.domain.Post;
 import com.solvd.laba.testing.api.domain.User;
+import com.solvd.laba.testing.api.method.CreatePost;
+import com.solvd.laba.testing.api.method.GetAllPosts;
+import com.solvd.laba.testing.api.method.GetPostById;
+import com.solvd.laba.testing.api.method.ModifyPost;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
