@@ -58,7 +58,7 @@ public class PostTest {
 
         // create request
         CreatePost createPost = new CreatePost();
-        createPost.addProperty("post", post);
+        createPost.setProperties("api/posts/post_random.properties");
 
         // run request
         createPost.callAPIExpectSuccess();
@@ -81,7 +81,7 @@ public class PostTest {
 
         // create post
         CreatePost createPost = new CreatePost();
-        createPost.addProperty("post", post);
+        createPost.setProperties("api/posts/post_random.properties");
 
         Response createPostResponse = createPost.callAPIExpectSuccess();
         createPost.validateResponse();

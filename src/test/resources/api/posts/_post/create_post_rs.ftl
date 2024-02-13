@@ -1,6 +1,6 @@
 {
-<#if (post.user.id)??>"userId": ${post.user.id},</#if>
+<#if user_id??>"userId": ${user_id},</#if>
 "id": "type:Integer",
-<#if post.title??>"title": "${post.title}",</#if>
-<#if post.body??>"body": "${post.body}"</#if>
+<#if title??>"title": "${title}",</#if>
+<#if body??>"body": "${body}"</#if>
 }

@@ -1,5 +1,5 @@
 {
-<#if (post.user.id)??>"userId": ${post.user.id},</#if>
-<#if post.title??>"title": "${post.title}",</#if>
-<#if post.body??>"body": "${post.body}"</#if>
+<#if user_id??>"userId": ${user_id},</#if>
+<#if title??>"title": "${title}",</#if>
+<#if body??>"body": "${body}"</#if>
 }
