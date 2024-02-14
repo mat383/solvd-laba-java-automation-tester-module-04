@@ -1,8 +1,10 @@
 package com.solvd.laba.testing.web;
 
 import com.solvd.laba.testing.web.pages.LoginPage;
+import com.solvd.laba.testing.web.pages.ProductsPage;
+import com.solvd.laba.testing.web.pages.components.sortOrderSelector;
 import com.zebrunner.carina.core.AbstractTest;
-import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class LoginTest extends AbstractTest {
@@ -18,13 +20,19 @@ public class LoginTest extends AbstractTest {
      */
     @Test
     public void verifyValidLoginLogoutTest() {
-        WebDriver driver = getDriver();
-        LoginPage loginPage = new LoginPage(driver);
+        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.open();
+        loginPage.isPageOpened();
 
-        loginPage.getLoginPrompt().typeUsername("standard_user");
-        loginPage.getLoginPrompt().typePassword("secret_sauce");
-        loginPage.getLoginPrompt().clickLoginButton();
 
+        ProductsPage productsPage = loginPage.logIn("standard_user", "secret_sauce").orElse(null);
+        Assert.assertNotNull(productsPage, "login unsuccessful");
+
+        var sortOrders = productsPage.getSortOrderSelector().getExpectedSortOrders();
+        for (var so : sortOrders) {
+            System.out.printf("- (%s) %s \n", so.getShortName(), so.getFullName());
+        }
+        System.out.println(productsPage.setSortOrder(sortOrderSelector.PredefinedSortOrder.SORT_FROM_HIGHEST_PRICE));
+        System.out.println();
     }
 }
