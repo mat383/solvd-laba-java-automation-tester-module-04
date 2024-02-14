@@ -1,5 +1,6 @@
 package com.solvd.laba.testing.web;
 
+import com.solvd.laba.testing.web.pages.DetailsPage;
 import com.solvd.laba.testing.web.pages.LoginPage;
 import com.solvd.laba.testing.web.pages.ProductsPage;
 import com.solvd.laba.testing.web.pages.components.sortOrderSelector;
@@ -28,11 +29,22 @@ public class LoginTest extends AbstractTest {
         ProductsPage productsPage = loginPage.logIn("standard_user", "secret_sauce").orElse(null);
         Assert.assertNotNull(productsPage, "login unsuccessful");
 
-        var sortOrders = productsPage.getSortOrderSelector().getExpectedSortOrders();
-        for (var so : sortOrders) {
-            System.out.printf("- (%s) %s \n", so.getShortName(), so.getFullName());
+        for (var productCard : productsPage.getProductCards()) {
+            productCard.addToCart();
+            System.out.printf("- %s :: %s\n", productCard.getName(), Double.toString(productCard.getPrice()));
+            System.out.printf("  %s\n", productCard.getDescription());
+            System.out.printf("  in card: %s\n", Boolean.toString(productCard.isInCard()));
         }
+
         System.out.println(productsPage.setSortOrder(sortOrderSelector.PredefinedSortOrder.SORT_FROM_HIGHEST_PRICE));
-        System.out.println();
+
+        for (var productCard : productsPage.getProductCards()) {
+            productCard.addToCart();
+            System.out.printf("- %s :: %s\n", productCard.getName(), Double.toString(productCard.getPrice()));
+            System.out.printf("  %s\n", productCard.getDescription());
+            System.out.printf("  in card: %s\n", Boolean.toString(productCard.isInCard()));
+        }
+
+        DetailsPage detailsPage = productsPage.getProductCards().get(3).gotoDetails();
     }
 }
