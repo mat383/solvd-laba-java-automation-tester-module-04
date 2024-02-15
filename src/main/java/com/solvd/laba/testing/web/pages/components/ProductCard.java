@@ -3,9 +3,12 @@ package com.solvd.laba.testing.web.pages.components;
 import com.solvd.laba.testing.web.pages.DetailsPage;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.webdriver.gui.AbstractUIObject;
+import lombok.Getter;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.Arrays;
 
 public class ProductCard extends AbstractUIObject {
 
@@ -36,24 +39,70 @@ public class ProductCard extends AbstractUIObject {
         return Double.parseDouble(this.price.getText().replace("$", ""));
     }
 
+    public String getCartButtonLabel() {
+        return this.cartButton.getText();
+    }
+
+    /**
+     * informs about cart button state, and throws
+     * RuntimeError when state doesn't match known states
+     *
+     * @return
+     */
+    public CartButtonState getCartButtonState() {
+        return CartButtonState.ofLabel(getCartButtonLabel());
+    }
+
+    public boolean isCartButtonInKnownState() {
+        return CartButtonState.isLabelKnown(getCartButtonLabel());
+    }
+
     public void addToCart() {
-        if (!isInCard()) {
+        if (getCartButtonState() == CartButtonState.ADD_TO_CART) {
             this.cartButton.click();
         }
     }
 
     public void removeFromCart() {
-        if (isInCard()) {
+        if (getCartButtonState() == CartButtonState.REMOVE_FROM_CART) {
             this.cartButton.click();
         }
-    }
-
-    public boolean isInCard() {
-        return this.cartButton.getText().equals("Remove");
     }
 
     public DetailsPage gotoDetails() {
         this.nameLink.click();
         return new DetailsPage(getDriver());
+    }
+
+    @Getter
+    public enum CartButtonState {
+        ADD_TO_CART("Add to cart"),
+        REMOVE_FROM_CART("Remove");
+
+        final String label;
+
+        CartButtonState(String label) {
+            this.label = label;
+        }
+
+        /**
+         * converts label to CartButtonState corresponding
+         * to given label. Throws invalid argument exception
+         * when label doesn't match any known state
+         */
+        public static CartButtonState ofLabel(String label) {
+            return Arrays.stream(CartButtonState.values())
+                    .filter(cartButtonState -> label.equals(cartButtonState.getLabel()))
+                    .findAny()
+                    .orElseThrow(() ->
+                            new IllegalArgumentException(("Unknown cart button label," +
+                                    " no known state matches label: '%s'").formatted(label))
+                    );
+        }
+
+        public static boolean isLabelKnown(String label) {
+            return Arrays.stream(CartButtonState.values())
+                    .anyMatch(cartButtonState -> cartButtonState.getLabel().equals(label));
+        }
     }
 }

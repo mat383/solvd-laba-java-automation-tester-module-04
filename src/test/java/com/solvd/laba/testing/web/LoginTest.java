@@ -33,16 +33,16 @@ public class LoginTest extends AbstractTest {
             productCard.addToCart();
             System.out.printf("- %s :: %s\n", productCard.getName(), Double.toString(productCard.getPrice()));
             System.out.printf("  %s\n", productCard.getDescription());
-            System.out.printf("  in card: %s\n", Boolean.toString(productCard.isInCard()));
+            System.out.printf("  in card: %s\n", productCard.getCartButtonState());
         }
 
         System.out.println(productsPage.setSortOrder(sortOrderSelector.PredefinedSortOrder.SORT_FROM_HIGHEST_PRICE));
 
         for (var productCard : productsPage.getProductCards()) {
-            productCard.addToCart();
+            productCard.removeFromCart();
             System.out.printf("- %s :: %s\n", productCard.getName(), Double.toString(productCard.getPrice()));
             System.out.printf("  %s\n", productCard.getDescription());
-            System.out.printf("  in card: %s\n", Boolean.toString(productCard.isInCard()));
+            System.out.printf("  in card: %s\n", productCard.getCartButtonState());
         }
 
         DetailsPage detailsPage = productsPage.getProductCards().get(3).gotoDetails();
