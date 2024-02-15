@@ -1,8 +1,7 @@
 package com.solvd.laba.testing.web;
 
-import com.solvd.laba.testing.web.pages.DetailsPage;
+import com.solvd.laba.testing.web.pages.InventoryPage;
 import com.solvd.laba.testing.web.pages.LoginPage;
-import com.solvd.laba.testing.web.pages.ProductsPage;
 import com.solvd.laba.testing.web.pages.components.sortOrderSelector;
 import com.zebrunner.carina.core.AbstractTest;
 import org.testng.Assert;
@@ -26,25 +25,29 @@ public class LoginTest extends AbstractTest {
         loginPage.isPageOpened();
 
 
-        ProductsPage productsPage = loginPage.logIn("standard_user", "secret_sauce").orElse(null);
-        Assert.assertNotNull(productsPage, "login unsuccessful");
+        InventoryPage inventoryPage = loginPage.logIn("standard_user", "secret_sauce").orElse(null);
+        Assert.assertNotNull(inventoryPage, "login unsuccessful");
 
-        for (var productCard : productsPage.getProductCards()) {
+        for (var productCard : inventoryPage.getProductCards()) {
             productCard.addToCart();
             System.out.printf("- %s :: %s\n", productCard.getName(), Double.toString(productCard.getPrice()));
             System.out.printf("  %s\n", productCard.getDescription());
             System.out.printf("  in card: %s\n", productCard.getCartButtonState());
         }
 
-        System.out.println(productsPage.setSortOrder(sortOrderSelector.PredefinedSortOrder.SORT_FROM_HIGHEST_PRICE));
+        System.out.println(inventoryPage.setSortOrder(sortOrderSelector.PredefinedSortOrder.SORT_FROM_HIGHEST_PRICE));
 
-        for (var productCard : productsPage.getProductCards()) {
+        for (var productCard : inventoryPage.getProductCards()) {
             productCard.removeFromCart();
             System.out.printf("- %s :: %s\n", productCard.getName(), Double.toString(productCard.getPrice()));
             System.out.printf("  %s\n", productCard.getDescription());
             System.out.printf("  in card: %s\n", productCard.getCartButtonState());
         }
 
-        DetailsPage detailsPage = productsPage.getProductCards().get(3).gotoDetails();
+        //System.out.println(inventoryPage.getPrimaryHeader().getSideMenu().isOpened());
+        inventoryPage.getPrimaryHeader().getSideMenu().logOut();
+        //inventoryPage.getPrimaryHeader().getSideMenu().openSideMenu();
+        //LoginPage shoppingCartPage = inventoryPage.getPrimaryHeader().getSideMenu().logOut();
+        System.out.println();
     }
 }

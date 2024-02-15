@@ -1,6 +1,6 @@
 package com.solvd.laba.testing.web.pages.components;
 
-import com.solvd.laba.testing.web.pages.ProductsPage;
+import com.solvd.laba.testing.web.pages.InventoryPage;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.webdriver.gui.AbstractUIObject;
 import org.openqa.selenium.SearchContext;
@@ -19,9 +19,6 @@ public class LoginPrompt extends AbstractUIObject {
 
     @FindBy(xpath = ".//input[@id='login-button']")
     private ExtendedWebElement loginButton;
-
-    @FindBy(id = "bm-menu-wrap")
-    private SideMenu sideMenu;
 
     public LoginPrompt(WebDriver driver, SearchContext searchContext) {
         super(driver, searchContext);
@@ -42,12 +39,12 @@ public class LoginPrompt extends AbstractUIObject {
 
     /**
      * clicks login button, if login was successful,
-     * returns new ProductsPage, if failed returns
+     * returns new InventoryPage, if failed returns
      * empty Optional
      */
-    public Optional<ProductsPage> clickLoginButton() {
+    public Optional<InventoryPage> clickLoginButton() {
         this.loginButton.click();
-        ProductsPage productsPage = new ProductsPage(getDriver());
+        InventoryPage productsPage = new InventoryPage(getDriver());
 
         if (productsPage.isPageOpened()) {
             return Optional.of(productsPage);

@@ -13,7 +13,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.Collections;
 import java.util.List;
 
-public class ProductsPage extends AbstractPage {
+public class InventoryPage extends AbstractPage {
 
     @Getter
     @FindBy(xpath = "//*[@id='header_container']//*[contains(@class,'primary_header')]")
@@ -29,7 +29,7 @@ public class ProductsPage extends AbstractPage {
     @FindBy(css = "#inventory_container .inventory_item")
     private List<ProductCard> productCards;
 
-    public ProductsPage(WebDriver driver) {
+    public InventoryPage(WebDriver driver) {
         super(driver);
         setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
         setUiLoadedMarker(inventoryContainer);

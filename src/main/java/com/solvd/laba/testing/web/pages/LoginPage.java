@@ -29,7 +29,7 @@ public class LoginPage extends AbstractPage {
      * if login was successful returns new ProductsPage,
      * if failed returns empty Optional
      */
-    public Optional<ProductsPage> logIn(String username, String password) {
+    public Optional<InventoryPage> logIn(String username, String password) {
         loginPrompt.typeUsername(username);
         loginPrompt.typePassword(password);
         return loginPrompt.clickLoginButton();
