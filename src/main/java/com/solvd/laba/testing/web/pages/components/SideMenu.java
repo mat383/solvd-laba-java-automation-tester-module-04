@@ -47,18 +47,27 @@ public class SideMenu extends AbstractUIObject {
         return this.closeButton.isVisible();
     }
 
-    public InventoryPage gotoInventoryPage() {
+    /**
+     * open side menu if closed and go to inventory page
+     */
+    public InventoryPage goToInventoryPage() {
         openSideMenu();
         this.inventoryLink.click();
         return new InventoryPage(getDriver());
     }
 
+    /**
+     * open side menu if closed and logs out
+     */
     public LoginPage logOut() {
         openSideMenu();
         this.logoutLink.click();
         return new LoginPage(getDriver());
     }
 
+    /**
+     * open side menu if closed and resets app state
+     */
     public void resetWebState() {
         openSideMenu();
         this.resetAppStateLink.click();

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @Getter
-public class PrimaryHeader extends AbstractUIObject {
+public class ShoppingCartButton extends AbstractUIObject {
 
 
     @FindBy(xpath = ".//*[@id='shopping_cart_container']//*[contains(@class,'shopping_cart_link')]")
@@ -24,15 +24,14 @@ public class PrimaryHeader extends AbstractUIObject {
     @FindBy(className = "shopping_cart_badge")
     private ExtendedWebElement shoppingCartBadge;
 
-    @Getter
-    @FindBy(id = "menu_button_container")
-    private SideMenu sideMenu;
-
-    public PrimaryHeader(WebDriver driver, SearchContext searchContext) {
+    public ShoppingCartButton(WebDriver driver, SearchContext searchContext) {
         super(driver, searchContext);
     }
 
-    public ShoppingCartPage gotoShoppingCart() {
+    /**
+     * opens shopping cart page
+     */
+    public ShoppingCartPage click() {
         this.shoppingCartLink.click();
         return new ShoppingCartPage(getDriver());
     }
@@ -42,6 +41,7 @@ public class PrimaryHeader extends AbstractUIObject {
      * or empty optional if badge is not present
      */
     public Optional<Integer> getShoppingCartBadgeCount() {
+        // TODO: rename
         if (this.shoppingCartBadge.isElementPresent()) {
             return Optional.of(Integer.parseInt(this.shoppingCartBadge.getText()));
         }

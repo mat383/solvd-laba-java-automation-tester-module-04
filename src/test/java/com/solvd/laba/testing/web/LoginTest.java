@@ -2,7 +2,6 @@ package com.solvd.laba.testing.web;
 
 import com.solvd.laba.testing.web.pages.InventoryPage;
 import com.solvd.laba.testing.web.pages.LoginPage;
-import com.solvd.laba.testing.web.pages.components.sortOrderSelector;
 import com.zebrunner.carina.core.AbstractTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -35,7 +34,11 @@ public class LoginTest extends AbstractTest {
             System.out.printf("  in card: %s\n", productCard.getCartButtonState());
         }
 
-        System.out.println(inventoryPage.setSortOrder(sortOrderSelector.PredefinedSortOrder.SORT_FROM_HIGHEST_PRICE));
+        Assert.assertTrue(inventoryPage.sort(InventoryPage.SortOrder.SORT_A_TO_Z), "sort A->Z failed");
+        Assert.assertTrue(inventoryPage.sort(InventoryPage.SortOrder.SORT_Z_TO_A), "sort Z->A failed");
+        Assert.assertTrue(inventoryPage.sort(InventoryPage.SortOrder.SORT_FROM_LOWEST_PRICE), "sort from cheapest failed");
+        Assert.assertTrue(inventoryPage.sort(InventoryPage.SortOrder.SORT_FROM_HIGHEST_PRICE), "sort from most expensive failed");
+
 
         for (var productCard : inventoryPage.getProductCards()) {
             productCard.removeFromCart();
@@ -45,7 +48,7 @@ public class LoginTest extends AbstractTest {
         }
 
         //System.out.println(inventoryPage.getPrimaryHeader().getSideMenu().isOpened());
-        inventoryPage.getPrimaryHeader().getSideMenu().logOut();
+        inventoryPage.getSideMenu().logOut();
         //inventoryPage.getPrimaryHeader().getSideMenu().openSideMenu();
         //LoginPage shoppingCartPage = inventoryPage.getPrimaryHeader().getSideMenu().logOut();
         System.out.println();

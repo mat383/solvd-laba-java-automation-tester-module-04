@@ -69,7 +69,7 @@ public class ProductCard extends AbstractUIObject {
         }
     }
 
-    public DetailsPage gotoDetails() {
+    public DetailsPage goToDetails() {
         this.nameLink.click();
         return new DetailsPage(getDriver());
     }
