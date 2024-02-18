@@ -1,6 +1,5 @@
 package com.solvd.laba.testing.web.pages;
 
-import com.zebrunner.carina.utils.config.Configuration;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.webdriver.gui.AbstractPage;
 import org.openqa.selenium.WebDriver;
@@ -22,12 +21,9 @@ public class LoginPage extends AbstractPage {
 
     public LoginPage(WebDriver driver) {
         super(driver);
+        setPageURL("");
     }
 
-    @Override
-    public void open() {
-        openURL(Configuration.getRequired("main_url"));
-    }
 
     /**
      * performs login with given credentials,
