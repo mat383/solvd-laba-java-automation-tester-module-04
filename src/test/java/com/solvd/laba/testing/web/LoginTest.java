@@ -29,7 +29,7 @@ public class LoginTest extends AbstractTest {
 
         for (var productCard : inventoryPage.getProductCards()) {
             productCard.addToCart();
-            System.out.printf("- %s :: %s\n", productCard.getName(), Double.toString(productCard.getPrice()));
+            System.out.printf("- %s :: %s\n", productCard.getProductName(), productCard.getPrice().toString());
             System.out.printf("  %s\n", productCard.getDescription());
             System.out.printf("  in card: %s\n", productCard.getCartButtonState());
         }
@@ -42,7 +42,7 @@ public class LoginTest extends AbstractTest {
 
         for (var productCard : inventoryPage.getProductCards()) {
             productCard.removeFromCart();
-            System.out.printf("- %s :: %s\n", productCard.getName(), Double.toString(productCard.getPrice()));
+            System.out.printf("- %s :: %s\n", productCard.getProductName(), productCard.getPrice().toString());
             System.out.printf("  %s\n", productCard.getDescription());
             System.out.printf("  in card: %s\n", productCard.getCartButtonState());
         }
