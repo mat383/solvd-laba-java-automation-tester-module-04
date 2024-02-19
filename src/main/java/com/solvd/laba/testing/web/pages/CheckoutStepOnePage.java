@@ -32,6 +32,7 @@ public class CheckoutStepOnePage extends AbstractPage {
 
     public CheckoutStepOnePage(WebDriver driver) {
         super(driver);
+        setPageURL("checkout-step-one.html");
     }
 
     public ShoppingCartPage cancelCheckout() {

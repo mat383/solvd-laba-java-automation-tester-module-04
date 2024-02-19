@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ShoppingCartPage extends AbstractPage {
 
-    @FindBy(className = "card_item")
+    @FindBy(className = "cart_item")
     private List<ShoppingCartItem> shoppingCartItems;
 
     @FindBy(id = "checkout")
@@ -36,6 +36,7 @@ public class ShoppingCartPage extends AbstractPage {
 
     public ShoppingCartPage(WebDriver driver) {
         super(driver);
+        setPageURL("cart.html");
     }
 
     /**
@@ -47,12 +48,18 @@ public class ShoppingCartPage extends AbstractPage {
     }
 
     public CheckoutStepOnePage goToCheckout() {
-        this.continueShoppingButton.click();
+        this.checkoutButton.click();
         return new CheckoutStepOnePage(getDriver());
     }
 
     public List<ShoppingCartItem> getShoppingCartItems() {
         return Collections.unmodifiableList(this.shoppingCartItems);
+    }
+
+    public ShoppingCartItem getShoppingCartItemByName(String itemName) {
+        return this.shoppingCartItems.stream()
+                .filter(shoppingCartItem -> itemName.equals(shoppingCartItem.getProductName()))
+                .findAny().get();
     }
 
     public boolean removeItemFromShoppingCart(ShoppingCartItem item) {
@@ -68,6 +75,16 @@ public class ShoppingCartPage extends AbstractPage {
         return this.shoppingCartItems.stream()
                 .map(ShoppingCartItem::getProductName)
                 .anyMatch(itemName::equals);
+    }
+
+    /**
+     * checks if item with specified name & price per unit
+     * is in shopping cart
+     */
+    public boolean isProductInShoppingCart(String itemName, BigDecimal itemPrice) {
+        return this.shoppingCartItems.stream()
+                .anyMatch(shoppingCartItem -> itemName.equals(shoppingCartItem.getProductName())
+                        && (itemPrice.compareTo(shoppingCartItem.getPrice()) == 0));
     }
 
     public BigDecimal getTotalPrice() {

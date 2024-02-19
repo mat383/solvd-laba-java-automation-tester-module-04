@@ -23,6 +23,7 @@ public class CheckoutCompletePage extends AbstractPage {
 
     public CheckoutCompletePage(WebDriver driver) {
         super(driver);
+        setPageURL("checkout-complete.html");
     }
 
     public InventoryPage goBackToInventoryPage() {

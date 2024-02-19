@@ -19,7 +19,7 @@ public class CheckoutStepTwoPage extends AbstractPage {
     // tax amount, tax is calculated by multiplying by this number
     // so 0.5 is 50% tax
     private static final BigDecimal TAX_AMOUNT = new BigDecimal("0.08");
-    @FindBy(className = "card_item")
+    @FindBy(className = "cart_item")
     private List<CheckoutItem> checkoutItems;
     @FindBy(className = "summary_subtotal_label")
     private ExtendedWebElement priceWithoutTax;
@@ -28,9 +28,9 @@ public class CheckoutStepTwoPage extends AbstractPage {
     @FindBy(className = "summary_total_label")
     private ExtendedWebElement priceWithTax;
 
-    @FindBy(className = "cancel")
+    @FindBy(id = "cancel")
     private ExtendedWebElement cancelButton;
-    @FindBy(className = "finish")
+    @FindBy(id = "finish")
     private ExtendedWebElement finishButton;
 
 
@@ -44,6 +44,7 @@ public class CheckoutStepTwoPage extends AbstractPage {
 
     public CheckoutStepTwoPage(WebDriver driver) {
         super(driver);
+        setPageURL("checkout-step-two.html");
     }
 
     public InventoryPage cancelCheckout() {
@@ -99,6 +100,15 @@ public class CheckoutStepTwoPage extends AbstractPage {
         return this.checkoutItems.stream()
                 .map(CheckoutItem::getProductName)
                 .anyMatch(itemName::equals);
+    }
+
+    /**
+     * checks if order contains specified item with specified price per unit
+     */
+    public boolean orderContains(String itemName, BigDecimal itemPrice) {
+        return this.checkoutItems.stream()
+                .anyMatch(checkoutItem -> itemName.equals(checkoutItem.getProductName())
+                        && (itemPrice.compareTo(checkoutItem.getPricePerItem()) == 0));
     }
 
 

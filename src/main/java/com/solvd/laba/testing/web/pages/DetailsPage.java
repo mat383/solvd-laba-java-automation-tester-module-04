@@ -35,6 +35,7 @@ public class DetailsPage extends AbstractPage {
 
     public DetailsPage(WebDriver driver) {
         super(driver);
+        setPageURL("inventory-item.html");
     }
 
     public InventoryPage goBackToInventory() {

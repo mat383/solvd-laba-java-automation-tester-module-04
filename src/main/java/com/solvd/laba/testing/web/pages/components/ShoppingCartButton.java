@@ -15,7 +15,7 @@ import java.util.Optional;
 public class ShoppingCartButton extends AbstractUIObject {
 
 
-    @FindBy(xpath = ".//*[@id='shopping_cart_container']//*[contains(@class,'shopping_cart_link')]")
+    @FindBy(className = "shopping_cart_link")
     private ExtendedWebElement shoppingCartLink;
 
     // present only if at lease one item is in the shopping cart
@@ -31,7 +31,7 @@ public class ShoppingCartButton extends AbstractUIObject {
     /**
      * opens shopping cart page
      */
-    public ShoppingCartPage click() {
+    public ShoppingCartPage goToShoppingCart() {
         this.shoppingCartLink.click();
         return new ShoppingCartPage(getDriver());
     }

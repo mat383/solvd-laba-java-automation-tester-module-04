@@ -44,6 +44,7 @@ public class InventoryPage extends AbstractPage {
         super(driver);
         setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
         setUiLoadedMarker(inventoryContainer);
+        setPageURL("inventory.html");
     }
 
 
@@ -59,7 +60,6 @@ public class InventoryPage extends AbstractPage {
         this.sortOrderSelector.click();
         this.sortOrderSelector.select(sortOrder.getFullName());
         if (!this.activeSortOrderLabel.getText().equals(sortOrder.getFullName())) {
-            System.out.println("FAILED");
             return false;
         }
         return isSorted(sortOrder);
