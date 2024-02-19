@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public class WebTest extends AbstractTest {
 
@@ -35,6 +36,27 @@ public class WebTest extends AbstractTest {
 
         loginPage = inventoryPage.getSideMenu().logOut();
         Assert.assertTrue(loginPage.isPageOpened(), "Log out was unsuccessful");
+    }
+
+    /**
+     * verify that login with invalid credentials fails
+     * <p>
+     * Steps:
+     * 1. Open login page - result: login page loads
+     * 2. Login with invalid credentials - result: login fails and displays info about invalid credentials
+     */
+    @Test
+    public void verifyLoginWithInvalidCredentialsTest() {
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.open();
+
+        Assert.assertTrue(loginPage.isPageOpened(), "Login page didn't open");
+
+        Optional<InventoryPage> inventoryPage = loginPage.logIn(
+                R.TESTDATA.get("invalid_credentials_username"),
+                R.TESTDATA.get("invalid_credentials_password"));
+        Assert.assertTrue(inventoryPage.isEmpty(), "login was successful but failure was expected");
+        Assert.assertEquals(loginPage.getState(), LoginPage.State.INVALID_CREDENTIALS);
     }
 
     /**
@@ -82,7 +104,7 @@ public class WebTest extends AbstractTest {
      * 1. Open login page - result: login page loads
      * 2. Log in with valid credentials - result: inventory page appears
      * 3. Add first two items to cart - result: items are added to cart, indicated by buttons in items & cart badge
-     * 4. Go to shopping cart page - result: shopping cart page opens, containing added products and correct total price
+     * 4. Go to shopping cart page - result: shopping cart page opens, containing added products
      * 5. Go through first step of checkout inserting test data - result: second step of checkout appears
      * with purchased items, and properly calculated total price and tax
      * 6. Finish checkout process - result: checkout complete page appears
@@ -147,6 +169,8 @@ public class WebTest extends AbstractTest {
                 "Cannot find first product with the same price in the checkout");
         softAssert.assertTrue(checkoutStepTwoPage.orderContains(secondProductName, secondProductPrice),
                 "Cannot find second product with the same price in the checkout");
+        softAssert.assertTrue(checkoutStepTwoPage.isPriceCalculationCorrect(),
+                "Invalid order cost calculations at second step of checkout");
 
         // finalize order
         CheckoutCompletePage checkoutCompletePage = checkoutStepTwoPage.finalizeCheckout();
@@ -160,6 +184,95 @@ public class WebTest extends AbstractTest {
         inventoryPage.getProductCards().stream()
                 .filter(productCard -> firstProductName.equals(productCard.getProductName())
                         || secondProductName.equals(productCard.getProductName()))
+                .forEach(productCard -> softAssert.assertEquals(
+                        productCard.getCartButtonState(),
+                        InventoryButton.ButtonState.ADD_TO_CART));
+        softAssert.assertTrue(inventoryPage.getShoppingCartButton().getShoppingCartBadgeCount().isEmpty(),
+                "shopping cart badge indicate that there is something in the cart");
+
+        softAssert.assertAll();
+    }
+
+
+    /**
+     * validate ordering item from item details page
+     * <p>
+     * Steps:
+     * 1. Open login page - result: login page loads
+     * 2. Log in with valid credentials - result: inventory page appears
+     * 3. Go to details page of the first item - result: details page appears with same price and item name
+     * 4. Add item to cart - result: button for adding to cart changes state to REMOVE_FROM_CART and badge appears on
+     * shopping cart with number one
+     * 5. Go to shopping cart page - result: shopping cart page opens, containing added product
+     * 6. Go through first step of checkout inserting test data - result: second step of checkout appears
+     * with purchased items, and properly calculated total price and tax
+     * 8. Finish checkout process - result: checkout complete page appears
+     * 9. Go back to inventory - result: inventory page appears with no items in the cart
+     */
+    @Test
+    public void validateOrderFromDetailsPageTest() {
+        // login
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.open();
+
+        Assert.assertTrue(loginPage.isPageOpened(), "Login page didn't open");
+
+        InventoryPage inventoryPage = loginPage.logIn(
+                        R.TESTDATA.get("standard_user_username"),
+                        R.TESTDATA.get("standard_user_password"))
+                .orElse(null);
+        Assert.assertNotNull(inventoryPage, "login unsuccessful");
+        inventoryPage.assertPageOpened();
+
+        // select first product from list and save its name and price
+        SoftAssert softAssert = new SoftAssert();
+
+        InventoryPage.ProductCard productInventoryCard = inventoryPage.getProductCards().getFirst();
+        String productName = productInventoryCard.getProductName();
+        BigDecimal productPrice = productInventoryCard.getPrice();
+
+        // go to product details
+        DetailsPage detailsPage = productInventoryCard.goToDetails();
+        detailsPage.assertPageOpened();
+
+        detailsPage.addToCart();
+        softAssert.assertEquals(detailsPage.getCartButtonState(), InventoryButton.ButtonState.REMOVE_FROM_CART,
+                "Add to cart button didn't reflect adding to cart");
+        softAssert.assertEquals(detailsPage.getShoppingCartButton().getShoppingCartBadgeCount().get(), Integer.valueOf(1),
+                "Shopping cart badge didn't reflect adding to cart");
+
+        // go to cart & validate product
+        ShoppingCartPage shoppingCartPage = detailsPage.getShoppingCartButton().goToShoppingCart();
+        shoppingCartPage.assertPageOpened();
+
+        softAssert.assertTrue(shoppingCartPage.isProductInShoppingCart(productName, productPrice),
+                "Cannot find product with same price in the shopping cart");
+
+        // go through checkout
+        CheckoutStepOnePage checkoutStepOnePage = shoppingCartPage.goToCheckout();
+        checkoutStepOnePage.assertPageOpened();
+        CheckoutStepTwoPage checkoutStepTwoPage = checkoutStepOnePage.continueCheckout(
+                R.TESTDATA.get("standard_user_first_name"),
+                R.TESTDATA.get("standard_user_last_name"),
+                R.TESTDATA.get("standard_user_postal_code"));
+        checkoutStepTwoPage.assertPageOpened();
+
+        softAssert.assertTrue(checkoutStepTwoPage.orderContains(productName, productPrice),
+                "Cannot find product with the same price in the checkout");
+        softAssert.assertTrue(checkoutStepTwoPage.isPriceCalculationCorrect(),
+                "Invalid order cost calculations at second step of checkout");
+
+        // finalize order
+        CheckoutCompletePage checkoutCompletePage = checkoutStepTwoPage.finalizeCheckout();
+        checkoutCompletePage.assertPageOpened();
+
+        // go back to inventory
+        inventoryPage = checkoutCompletePage.goBackToInventoryPage();
+        inventoryPage.assertPageOpened();
+
+        // check if product appear to be out of shopping cart
+        inventoryPage.getProductCards().stream()
+                .filter(productCard -> productName.equals(productCard.getProductName()))
                 .forEach(productCard -> softAssert.assertEquals(
                         productCard.getCartButtonState(),
                         InventoryButton.ButtonState.ADD_TO_CART));
