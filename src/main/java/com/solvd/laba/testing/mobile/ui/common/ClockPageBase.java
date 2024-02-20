@@ -11,6 +11,7 @@ public abstract class ClockPageBase extends AbstractPage {
         super(driver);
     }
 
+    public abstract AlarmPageBase goToAlarms();
 
     public abstract boolean addClock(String city);
 

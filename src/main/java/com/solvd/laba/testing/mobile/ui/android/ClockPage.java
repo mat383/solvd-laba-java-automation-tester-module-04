@@ -1,5 +1,7 @@
 package com.solvd.laba.testing.mobile.ui.android;
 
+import com.solvd.laba.testing.mobile.ui.android.components.NavigationBar;
+import com.solvd.laba.testing.mobile.ui.common.AlarmPageBase;
 import com.solvd.laba.testing.mobile.ui.common.ClockPageBase;
 import com.zebrunner.carina.utils.factory.DeviceType;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
@@ -23,8 +25,16 @@ public class ClockPage extends ClockPageBase {
     @FindBy(xpath = "//android.widget.TextView[@resource-id='com.google.android.deskclock:id/city_name']")
     private List<ExtendedWebElement> cityClocks;
 
+    @FindBy(xpath = "//android.view.ViewGroup[@resource-id='com.google.android.deskclock:id/toolbar']")
+    private NavigationBar navigationBar;
+
     public ClockPage(WebDriver driver) {
         super(driver);
+    }
+
+    @Override
+    public AlarmPageBase goToAlarms() {
+        return this.navigationBar.goToAlarmPage();
     }
 
     @Override
