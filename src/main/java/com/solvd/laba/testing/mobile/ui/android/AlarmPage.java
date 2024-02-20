@@ -1,5 +1,6 @@
 package com.solvd.laba.testing.mobile.ui.android;
 
+import com.solvd.laba.testing.mobile.ui.android.components.NavigationBar;
 import com.solvd.laba.testing.mobile.ui.common.AlarmPageBase;
 import com.zebrunner.carina.utils.factory.DeviceType;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
@@ -40,8 +41,16 @@ public class AlarmPage extends AlarmPageBase {
     @FindBy(xpath = "//android.widget.Button[@resource-id=\"android:id/button1\"]")
     private ExtendedWebElement addAlarmOkButton;
 
+    @FindBy(xpath = "//android.view.ViewGroup[@resource-id='com.google.android.deskclock:id/toolbar']")
+    private NavigationBar navigationBar;
+
     public AlarmPage(WebDriver driver) {
         super(driver);
+    }
+
+    @Override
+    public NavigationBar getNavigationBar() {
+        return this.navigationBar;
     }
 
     @Override

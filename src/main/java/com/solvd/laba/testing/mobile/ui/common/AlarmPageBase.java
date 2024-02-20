@@ -1,5 +1,6 @@
 package com.solvd.laba.testing.mobile.ui.common;
 
+import com.solvd.laba.testing.mobile.ui.common.components.NavigationBarBase;
 import com.zebrunner.carina.webdriver.gui.AbstractPage;
 import org.openqa.selenium.WebDriver;
 
@@ -10,6 +11,8 @@ public abstract class AlarmPageBase extends AbstractPage {
     public AlarmPageBase(WebDriver driver) {
         super(driver);
     }
+
+    public abstract NavigationBarBase getNavigationBar();
 
     public abstract boolean addSimpleAlarm(LocalTime time);
 

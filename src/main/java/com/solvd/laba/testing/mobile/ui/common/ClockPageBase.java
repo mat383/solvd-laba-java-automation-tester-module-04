@@ -1,5 +1,6 @@
 package com.solvd.laba.testing.mobile.ui.common;
 
+import com.solvd.laba.testing.mobile.ui.common.components.NavigationBarBase;
 import com.zebrunner.carina.webdriver.gui.AbstractPage;
 import org.openqa.selenium.WebDriver;
 
@@ -11,7 +12,7 @@ public abstract class ClockPageBase extends AbstractPage {
         super(driver);
     }
 
-    public abstract AlarmPageBase goToAlarms();
+    public abstract NavigationBarBase getNavigationBar();
 
     public abstract boolean addClock(String city);
 

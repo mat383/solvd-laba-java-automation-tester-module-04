@@ -1,7 +1,6 @@
 package com.solvd.laba.testing.mobile.ui.android;
 
 import com.solvd.laba.testing.mobile.ui.android.components.NavigationBar;
-import com.solvd.laba.testing.mobile.ui.common.AlarmPageBase;
 import com.solvd.laba.testing.mobile.ui.common.ClockPageBase;
 import com.zebrunner.carina.utils.factory.DeviceType;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
@@ -33,8 +32,8 @@ public class ClockPage extends ClockPageBase {
     }
 
     @Override
-    public AlarmPageBase goToAlarms() {
-        return this.navigationBar.goToAlarmPage();
+    public NavigationBar getNavigationBar() {
+        return this.navigationBar;
     }
 
     @Override
